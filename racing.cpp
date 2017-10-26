@@ -63,13 +63,47 @@ void Racing::renderField()
 		field_[i][12] = '|';
 	}
 	if(playerSide_ == LEFT)
-		for(int i=0; i<7; i++)
-			for(int j=0; j<9; j++)
-				field_[17+i][2+j] = '*';
+	{
+		for(int i=0; i<2; i++)
+			for(int j=3; j<6; j++)
+				field_[16+i][2+j] = '*';
+		for(int i=2; i<4; i++)
+			for(int j=0; j<3; j++)
+				field_[16+i][2+j] = '*';
+		for(int i=2; i<4; i++)
+			for(int j=6; j<9; j++)
+				field_[16+i][2+j] = '*';
+		for(int i=4; i<6; i++)
+			for(int j=3; j<6; j++)
+				field_[16+i][2+j] = '*';
+		for(int i=6; i<8; i++)
+			for(int j=0; j<3; j++)
+				field_[16+i][2+j] = '*';
+		for(int i=6; i<8; i++)
+			for(int j=6; j<9; j++)
+				field_[16+i][2+j] = '*';
+	}
 	if(playerSide_ == RIGHT)
-		for(int i=0; i<7; i++)
-			for(int j=0; j<9; j++)
-				field_[17+i][14+j] = '*';
+	{
+		for(int i=0; i<2; i++)
+			for(int j=3; j<6; j++)
+				field_[16+i][14+j] = '*';
+		for(int i=2; i<4; i++)
+			for(int j=0; j<3; j++)
+				field_[16+i][14+j] = '*';
+		for(int i=2; i<4; i++)
+			for(int j=6; j<9; j++)
+				field_[16+i][14+j] = '*';
+		for(int i=4; i<6; i++)
+			for(int j=3; j<6; j++)
+				field_[16+i][14+j] = '*';
+		for(int i=6; i<8; i++)
+			for(int j=0; j<3; j++)
+				field_[16+i][14+j] = '*';
+		for(int i=6; i<8; i++)
+			for(int j=6; j<9; j++)
+				field_[16+i][14+j] = '*';
+	}
 	if(obstacleSide_ == LEFT)
 		for(int i=obstaclePos_; i<obstaclePos_+3; i++)
 			for(int j=0; j<9; j++)

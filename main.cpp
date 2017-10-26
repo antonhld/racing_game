@@ -55,7 +55,7 @@ Start:
 		//increase obstacle position or create a new obstacle if the previous one is out of view
 		game.increaseObstaclePos();
 		
-		game.increaseDistance(25);
+		game.increaseDistance(170 - game.getSpeed());
 		Sleep(game.getSpeed());
 	}
 	//show start screen on manual exit
