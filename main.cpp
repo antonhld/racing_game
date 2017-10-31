@@ -13,6 +13,8 @@ void main()
 	{
 		if(newGame == true)
 		{
+			game.~Racing();
+			new(&game) Racing();
 			newGame = false;
 		}
 
