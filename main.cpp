@@ -4,38 +4,41 @@
 void main()
 {
 	srand(time(0));
-	int exitCode;
-Start:
+	bool exitCode = true, newGame = true;
 	Racing game;
 	//show start screen
-	if(!game.showStartScreen())
-		goto Exit;
-	for(;;)
+	exitCode = game.showStartScreen();
+
+	while(exitCode)
 	{
+		if(newGame == true)
+		{
+			newGame = false;
+		}
+
 		//clear the screen
-		clearscreen();
-		//render the field
-		game.renderField();
+		system("cls");
 		//output the field to the console
 		game.showField();
 
 		//move the car to the right
-		if(GetAsyncKeyState(VK_RIGHT))
+		if(GetAsyncKeyState(VK_DOWN))
 			game.moveRight();
 		//move the car to the left
-		if(GetAsyncKeyState(VK_LEFT))
+		if(GetAsyncKeyState(VK_UP))
 			game.moveLeft();
 		//increase speed
-		if(GetAsyncKeyState(VK_UP))
+		if(GetAsyncKeyState(VK_RIGHT))
 			game.increaseSpeed();
 		//decrease speed
-		if(GetAsyncKeyState(VK_DOWN))
+		if(GetAsyncKeyState(VK_LEFT))
 			game.decreaseSpeed();
 		//manually exit
 		if(GetAsyncKeyState(VK_ESCAPE))
 		{
-			exitCode = 1;
-			break;
+			exitCode = game.showEndScreen();
+			if(exitCode == true)
+				newGame = true;
 		}
 		//pause
 		if(GetAsyncKeyState(VK_RETURN))
@@ -48,8 +51,9 @@ Start:
 		//end the game if car hits the obstacle
 		if(game.detectHit())
 		{
-			exitCode = 0;
-			break;
+			exitCode = game.showEndScreen();
+			if(exitCode == true)
+				newGame = true;
 		}
 
 		//increase obstacle position or create a new obstacle if the previous one is out of view
@@ -58,13 +62,6 @@ Start:
 		game.increaseDistance(170 - game.getSpeed());
 		Sleep(game.getSpeed());
 	}
-	//show start screen on manual exit
-	if(exitCode)
-		goto Start;
-	//show end screen on crash
-	else
-		if(game.showEndScreen())
-			goto Start;
-Exit:
+	
 	return;
 }
