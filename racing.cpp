@@ -66,7 +66,7 @@ void Obstacle::decrementPosition()
 	if (position_ <= 0)
 	{
 		position_ = LANE_LENGTH - OBSTACLE_LENGTH;
-		lane_ = rand() % 2;
+		lane_     = rand() % 2;
 	}
 }
 
@@ -122,13 +122,15 @@ void Racing::addTimeOnPause(uint amount)
 }
 void Racing::showField()
 {
-	int playerLane = playerCar_.getLane();
-	int playerPos = playerCar_.getPosition();
+	int playerLane    = playerCar_.getLane();
+	int playerPos     = playerCar_.getPosition();
 	int obstacle_Lane = obstacle_.getLane();
-	int obstacle_Pos = obstacle_.getPosition();
+	int obstacle_Pos  = obstacle_.getPosition();
+
 	for(int i=0; i<LANE_LENGTH; i++)
 		cout<<'-';
 	cout<<'\n';
+
 	for(int i=0; i<LANE_WIDTH; i++)
 	{
 		string spacing = string(obstacle_Pos, SPACE);
@@ -140,10 +142,12 @@ void Racing::showField()
 			cout<<spacing + obstacle_.getModelLine(i);
 		cout<<'\n';
 	}
+
 	cout<<'\n';
 	for(int i=0; i<LANE_LENGTH; i++)
 		cout<<'-';
 	cout<<'\n';
+
 	for(int i=0; i<LANE_WIDTH; i++)
 	{
 		string spacing = string(obstacle_Pos, SPACE);
@@ -155,6 +159,7 @@ void Racing::showField()
 			cout<<spacing + obstacle_.getModelLine(i);
 		cout<<'\n';
 	}
+
 	cout<<'\n';
 	for(int i=0; i<LANE_LENGTH; i++)
 		cout<<'-';
@@ -174,7 +179,7 @@ bool Racing::showStartScreen()
 	while(true)
 	{
 		system("cls");
-		cout << "                       \n"
+		cout<< "                       \n"
 			<< "                       \n"
 			<< "        Racing         \n"
 			<< "                       \n"
@@ -243,7 +248,9 @@ bool Racing::detectHit()
 }
 void Racing::play()
 {
-	bool exitCode = true, newGame = true;
+	bool exitCode;
+	bool newGame = true;
+
 	//show start screen
 	exitCode = showStartScreen();
 
