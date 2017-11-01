@@ -4,48 +4,71 @@
 #include <ctime>
 #include <conio.h>
 #include <Windows.h>
-
-#define LEFT  0
-#define RIGHT 1
-#define LANE_LENGTH 75
-#define LANE_WIDTH 9
-#define CAR_WIDTH 22
-#define OBSTACLE_LENGTH 5
-#define MIN_SPEED 20
-#define MAX_SPEED 150
-#define SPEED_INC 20
-#define SPACE ' '
-#define uint unsigned int
+#include "defines.h"
 
 using namespace std;
-using namespace System;
+
+class RoadObject
+{
+public:
+	virtual string getModelLine(int lineIndex);
+	virtual inline int getLane();
+	virtual inline int getPosition();
+	virtual inline int getLength();
+protected:
+	RoadObject(int iLane, int iPosition, int iLentgh);
+	int lane_;
+	int position_;
+	int length_;
+	string* model_;
+};
+
+class Car : public RoadObject
+{
+public:
+	Car();
+	void moveLeft();
+	void moveRight();
+};
+
+class Obstacle : public RoadObject
+{
+public:
+	Obstacle();
+	void decrementPosition();
+};
+
+class Difficulty
+{
+public:
+	Difficulty();
+	Difficulty(int iDifficulty);
+	int difficultyLevel;
+	void increaseDifficulty();
+	string toString();
+};
 
 class Racing
 {
-private:
-	int playerSide_, obstaclePos_, obstacleSide_, speed_, distance_;
-	uint startTime_;
-
 public:
-	//default constructor
 	Racing();
-	//move the car to the left
-	void moveLeft();
-	//move the car to the right
-	void moveRight();
-	//move the obstacle down the road
-	void increaseObstaclePos();
+	void play();
+
+private:
+	int speed_;
+	int minSpeed_;
+	int distance_;
+	Car playerCar_;
+	Obstacle obstacle_;
+	Difficulty difficulty_;
+	uint startTime_;
 	void increaseSpeed();
 	void decreaseSpeed();
-	int getSpeed();
-	//subtract pause time from whole time
 	void addTimeOnPause(uint amount);
-	void increaseDistance(int amount);
 	void showField();
 	int getTime();
 	int calculatePoints();
 	bool showStartScreen();
 	bool showEndScreen();
-	//check if the car collides with an obstacle
 	bool detectHit();
 };
