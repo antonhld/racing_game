@@ -10,6 +10,7 @@ class Racing
 {
 public:
 	Racing();
+	Racing(int difficulty);
 	void play();
 
 private:

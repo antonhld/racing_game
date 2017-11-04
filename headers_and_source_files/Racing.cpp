@@ -9,6 +9,31 @@ Racing::Racing()
 	difficulty_(NORMAL),
 	startTime_(clock())
 {}
+Racing::Racing(int difficulty)
+	: distance_(0),
+	difficulty_(difficulty),
+	startTime_(clock())
+{
+	switch (difficulty)
+	{
+	case EASY:
+	{
+		speed_ = SPEED_DISPLAY - MIN_SPEED_EASY;
+		minSpeed_ = MIN_SPEED_EASY;
+	}break;
+	case NORMAL:
+	{
+		speed_ = SPEED_DISPLAY - MIN_SPEED_NORMAL;
+		minSpeed_ = MIN_SPEED_NORMAL;
+	}break;
+	case HARD:
+	{
+		speed_ = SPEED_DISPLAY - MIN_SPEED_HARD;
+		minSpeed_ = MIN_SPEED_HARD;
+		obstacle_ = Obstacle(OBSTACLE_CAR);
+	}break;
+	}
+}
 void Racing::increaseSpeed()
 {
 	if(speed_ > SPEED_INC)
@@ -71,11 +96,11 @@ void Racing::showField()
 }
 int Racing::getTime()
 {
-	return (clock()-startTime_)/1000;
+	return (clock()-startTime_)/TIME_TO_SECONDS;
 }
 int Racing::calculatePoints()
 {
-	return (distance_/((clock()-startTime_)/1000 + 1));
+	return (distance_/((clock()-startTime_)/TIME_TO_SECONDS + 1));
 }
 bool Racing::showStartScreen()
 {
@@ -101,22 +126,9 @@ bool Racing::showStartScreen()
 			return false;
 		//if 'd' is pressed
 		if (GetAsyncKeyState(0x44))
-		{
 			difficulty_.increaseDifficulty();
-			switch (difficulty_.difficultyLevel)
-			{
-			case EASY:
-				minSpeed_ = MIN_SPEED_EASY;
-				break;
-			case NORMAL:
-				minSpeed_ = MIN_SPEED_NORMAL;
-				break;
-			case HARD:
-				minSpeed_ = MIN_SPEED_HARD;
-				break;
-			}
-		}
-		Sleep(500);
+
+		Sleep(400);
 	}
 }
 bool Racing::showEndScreen()
@@ -156,12 +168,12 @@ void Racing::play()
 
 	//show start screen
 	exitCode = showStartScreen();
-
+	
 	while (exitCode)
 	{
 		if (newGame == true)
 		{
-			new(this) Racing();
+			new(this) Racing(difficulty_.difficultyLevel);
 			newGame = false;
 		}
 
@@ -209,6 +221,9 @@ void Racing::play()
 		obstacle_.decrementPosition();
 
 		distance_ += SPEED_DISPLAY - speed_;
-		Sleep(speed_);
+		if (obstacle_.identifier == OBSTACLE_BLOCK)
+			Sleep(speed_);
+		else if(obstacle_.identifier == OBSTACLE_CAR)
+			Sleep(speed_/3);
 	}
 }
