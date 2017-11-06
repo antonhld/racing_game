@@ -8,13 +8,13 @@
 class RoadObject
 {
 public:
+	virtual ~RoadObject();
 	virtual std::string getModelLine(int lineIndex);
 	const inline int getLane();
 	const inline int getPosition();
 	const inline int getLength();
 protected:
 	RoadObject(int iLane, int iPosition, int iLentgh);
-	virtual ~RoadObject();
 	int lane_;
 	int position_;
 	int length_;
