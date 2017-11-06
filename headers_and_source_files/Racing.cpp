@@ -7,31 +7,37 @@ Racing::Racing()
 	speed_(SPEED_DISPLAY - MIN_SPEED_NORMAL),
 	minSpeed_(MIN_SPEED_NORMAL),
 	difficulty_(NORMAL),
-	startTime_(clock())
+	startTime_(clock()),
+	startScreen_("Racing", vector<string>{"Start", "Exit"}),
+	difficultyScreen_("Difficulty", vector<string>{"Easy", "Normal", "Hard"}),
+	endScreen_("GAME OVER", vector<string>{"Restart", "Exit"})
 {}
 Racing::Racing(int difficulty)
 	: distance_(0),
 	difficulty_(difficulty),
-	startTime_(clock())
+	startTime_(clock()),
+	startScreen_("Racing", vector<string>{"Start", "Difficulty", "Exit"}),
+	difficultyScreen_("Difficulty", vector<string>{"Easy", "Normal", "Hard"}),
+	endScreen_("GAME OVER", vector<string>{"Restart", "Exit"})
 {
 	switch (difficulty)
 	{
-	case EASY:
-	{
-		speed_ = SPEED_DISPLAY - MIN_SPEED_EASY;
-		minSpeed_ = MIN_SPEED_EASY;
-	}break;
-	case NORMAL:
-	{
-		speed_ = SPEED_DISPLAY - MIN_SPEED_NORMAL;
-		minSpeed_ = MIN_SPEED_NORMAL;
-	}break;
-	case HARD:
-	{
-		speed_ = SPEED_DISPLAY - MIN_SPEED_HARD;
-		minSpeed_ = MIN_SPEED_HARD;
-		obstacle_ = Obstacle(OBSTACLE_CAR);
-	}break;
+		case EASY:
+		{
+			speed_ = SPEED_DISPLAY - MIN_SPEED_EASY;
+			minSpeed_ = MIN_SPEED_EASY;
+		}break;
+		case NORMAL:
+		{
+			speed_ = SPEED_DISPLAY - MIN_SPEED_NORMAL;
+			minSpeed_ = MIN_SPEED_NORMAL;
+		}break;
+		case HARD:
+		{
+			speed_ = SPEED_DISPLAY - MIN_SPEED_HARD;
+			minSpeed_ = MIN_SPEED_HARD;
+			obstacle_ = Obstacle(OBSTACLE_CAR);
+		}break;
 	}
 }
 void Racing::increaseSpeed()
@@ -55,9 +61,8 @@ void Racing::showField()
 	int obstacle_Lane = obstacle_.getLane();
 	int obstacle_Pos  = obstacle_.getPosition();
 
-	for(int i=0; i<LANE_LENGTH; i++)
-		cout<<'-';
-	cout<<'\n';
+	string roadMark = string(LANE_LENGTH, '-');
+	cout<<roadMark<<'\n';
 
 	for(int i=0; i<LANE_WIDTH; i++)
 	{
@@ -71,10 +76,7 @@ void Racing::showField()
 		cout<<'\n';
 	}
 
-	cout<<'\n';
-	for(int i=0; i<LANE_LENGTH; i++)
-		cout<<'-';
-	cout<<'\n';
+	cout<<'\n' << roadMark << '\n';
 
 	for(int i=0; i<LANE_WIDTH; i++)
 	{
@@ -88,10 +90,8 @@ void Racing::showField()
 		cout<<'\n';
 	}
 
-	cout<<'\n';
-	for(int i=0; i<LANE_LENGTH; i++)
-		cout<<'-';
-	cout<<'\n';
+	cout<<'\n' << roadMark << '\n';
+	
 	cout<<"   Speed: "<< SPEED_DISPLAY -speed_<<"   Time: "<<getTime()<<"   Distance: "<<distance_<<"   Points: "<<calculatePoints()<<"   \n";
 }
 int Racing::getTime()
@@ -102,59 +102,6 @@ int Racing::calculatePoints()
 {
 	return (distance_/((clock()-startTime_)/TIME_TO_SECONDS + 1));
 }
-bool Racing::showStartScreen()
-{
-	while(true)
-	{
-		system("cls");
-		cout<< "                       \n"
-			<< "                       \n"
-			<< "        Racing         \n"
-			<< "                       \n"
-			<< "    Difficulty: " << difficulty_.toString() << '\n'
-			<< "                       \n"
-			<< "    Press s to start   \n"
-			<< "    Press q to exit    \n"
-			<< "    Press d to change difficulty\n"
-			<< "                       \n"
-			<< "                       \n";
-		//if 's' is pressed
-		if (GetAsyncKeyState(0x53))
-			return true;
-		//if 'q' is pressed
-		if(GetAsyncKeyState(0x51))
-			return false;
-		//if 'd' is pressed
-		if (GetAsyncKeyState(0x44))
-			difficulty_.increaseDifficulty();
-
-		Sleep(400);
-	}
-}
-bool Racing::showEndScreen()
-{
-	system("cls");
-	cout<<"                       \n"
-		<<"                       \n"
-		<<"       GAME OVER       \n"
-		<<"    Time:"<<getTime()<<"\n"
-		<<"    Distance:"<<distance_<<"\n"
-		<<"    Points:"<<calculatePoints()<<"\n"
-		<<"                       \n"
-		<<"    Press q to exit    \n" 
-		<<"    Press s to start   \n"
-		<<"                       \n"
-		<<"                       \n";
-	while(true)
-	{
-		//if 'q' is pressed
-		if(GetAsyncKeyState(0x51))
-			return false;
-		//if 's' is pressed
-		if(GetAsyncKeyState(0x53))
-			return true;
-	}
-}
 bool Racing::detectHit()
 {
 	if(playerCar_.getLane() == obstacle_.getLane() && obstacle_.getPosition() <= CAR_LENGTH + CAR_POSITION)
@@ -163,11 +110,20 @@ bool Racing::detectHit()
 }
 void Racing::play()
 {
-	bool exitCode;
+	bool exitCode = true;
 	bool newGame = true;
 
-	//show start screen
-	exitCode = showStartScreen();
+	int menuCode = startScreen_.Show();
+	switch (menuCode)
+	{
+		case MENU_START:
+			difficulty_.setDifficulty(difficultyScreen_.Show());
+			break;
+		case MENU_EXIT:
+			return;
+		default:
+			break;
+	}
 	
 	while (exitCode)
 	{
@@ -197,7 +153,7 @@ void Racing::play()
 		//manually exit
 		if (GetAsyncKeyState(VK_ESCAPE))
 		{
-			exitCode = showEndScreen();
+			exitCode = !(endScreen_.Show());
 			if (exitCode == true)
 				newGame = true;
 		}
@@ -212,7 +168,7 @@ void Racing::play()
 		//end the game if car hits the obstacle_
 		if (detectHit())
 		{
-			exitCode = showEndScreen();
+			exitCode = !(endScreen_.Show());
 			if (exitCode == true)
 				newGame = true;
 		}

@@ -10,19 +10,16 @@
 #define OBSTACLE_BLOCK 0
 #define OBSTACLE_CAR 1
 #define TIME_TO_SECONDS 1000
-namespace speed
-{
-	#define MIN_SPEED_EASY 80
-	#define MIN_SPEED_NORMAL 100
-	#define MIN_SPEED_HARD 120
-	#define SPEED_INC 10
-	#define SPEED_DISPLAY 165
-};
-namespace difficulty
-{
-	#define EASY 1
-	#define NORMAL 2
-	#define HARD 3
-};
+#define MIN_SPEED_EASY 80
+#define MIN_SPEED_NORMAL 100
+#define MIN_SPEED_HARD 120
+#define SPEED_INC 10
+#define SPEED_DISPLAY 165
+#define EASY 0
+#define NORMAL 1
+#define HARD 2
+#define MENU_START 0
+#define MENU_EXIT 1
+#define SCREEN_SLEEP 250
 #define SPACE ' '
 #define uint unsigned int

@@ -4,6 +4,7 @@
 #include "Car.h"
 #include "Obstacle.h"
 #include "Difficulty.h"
+#include "MenuScreen.h"
 using namespace std; 
 
 class Racing
@@ -20,6 +21,9 @@ private:
 	Car playerCar_;
 	Obstacle obstacle_;
 	Difficulty difficulty_;
+	MenuScreen startScreen_;
+	MenuScreen endScreen_;
+	MenuScreen difficultyScreen_;
 	uint startTime_;
 	void increaseSpeed();
 	void decreaseSpeed();
@@ -27,7 +31,5 @@ private:
 	void showField();
 	int getTime();
 	int calculatePoints();
-	bool showStartScreen();
-	bool showEndScreen();
 	bool detectHit();
 };
